@@ -52,7 +52,7 @@ sqlFormatter.format('SELECT *', {
   language: 'n1ql', // Defaults to "sql"
   indent: '    ', // Defaults to two spaces,
   uppercase: true, // Defaults to false
-  linesBetweenQueries: 2 // Defaults to 1
+  linesBetweenQueries: 2, // Defaults to 1
 });
 ```
 

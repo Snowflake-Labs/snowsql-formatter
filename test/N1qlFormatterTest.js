@@ -138,8 +138,8 @@ describe('N1qlFormatter', () => {
     const result = format('SELECT $variable, $\'var name\', $"var name", $`var name`;', {
       params: {
         variable: '"variable value"',
-        'var name': "'var value'"
-      }
+        'var name': "'var value'",
+      },
     });
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -155,8 +155,8 @@ describe('N1qlFormatter', () => {
       params: {
         0: 'first',
         1: 'second',
-        2: 'third'
-      }
+        2: 'third',
+      },
     });
     expect(result).toBe(dedent/* sql */ `
       SELECT

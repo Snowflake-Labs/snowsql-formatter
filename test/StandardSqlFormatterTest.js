@@ -5,7 +5,9 @@ import dedent from 'dedent-js';
 describe('StandardSqlFormatter', () => {
   behavesLikeSqlFormatter();
 
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'sql' });
+  const format = (query, cfg = {}) => {
+    return sqlFormatter.format(query, { ...cfg, language: 'sql' });
+  };
 
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);')).toBe(
@@ -86,8 +88,8 @@ describe('StandardSqlFormatter', () => {
           variable: '"variable value"',
           'a1_2.3$': "'weird value'",
           'var name': "'var value'",
-          'var\\name': `'var\\ value'`
-        }
+          'var\\name': `'var\\ value'`,
+        },
       }
     );
     expect(result).toBe(dedent/* sql */ `
@@ -127,8 +129,8 @@ describe('StandardSqlFormatter', () => {
           'a1_2.3$': "'weird value'",
           'var name': "'var value'",
           "escaped 'var'": "'weirder value'",
-          '^*& weird " var   ': "'super weird value'"
-        }
+          '^*& weird " var   ': "'super weird value'",
+        },
       }
     );
     expect(result).toBe(dedent/* sql */ `
@@ -154,13 +156,169 @@ describe('StandardSqlFormatter', () => {
     `);
   });
 
+  it('formats long CREATE TABLE', () => {
+    expect(
+      sqlFormatter.format(
+        'CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);'
+      )
+    ).toBe(dedent/* sql */ `
+      CREATE TABLE items (
+        a INT PRIMARY KEY,
+        b TEXT,
+        c INT NOT NULL,
+        d INT NOT NULL
+      );
+    `);
+  });
+
+  it('formats INSERT without INTO', () => {
+    const result = sqlFormatter.format(
+      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
+    );
+    expect(result).toBe(dedent/* sql */ `
+      INSERT
+        Customers (ID, MoneyBalance, Address, City)
+      VALUES
+        (12, -123.4, 'Skagen 2111', 'Stv');
+    `);
+  });
+
+  it('formats ALTER TABLE ... MODIFY query', () => {
+    const result = sqlFormatter.format(
+      'ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;'
+    );
+    expect(result).toBe(dedent/* sql */ `
+      ALTER TABLE
+        supplier
+      MODIFY
+        supplier_name char(100) NOT NULL;
+    `);
+  });
+
+  it('formats ALTER TABLE ... ALTER COLUMN query', () => {
+    const result = sqlFormatter.format(
+      'ALTER TABLE supplier ALTER COLUMN supplier_name VARCHAR(100) NOT NULL;'
+    );
+    expect(result).toBe(dedent/* sql */ `
+      ALTER TABLE
+        supplier
+      ALTER COLUMN
+        supplier_name VARCHAR(100) NOT NULL;
+    `);
+  });
+
+  it('recognizes [] strings', () => {
+    expect(sqlFormatter.format('[foo JOIN bar]')).toBe('[foo JOIN bar]');
+    expect(sqlFormatter.format('[foo ]] JOIN bar]')).toBe('[foo ]] JOIN bar]');
+  });
+
+  it('recognizes @variables', () => {
+    const result = sqlFormatter.format(
+      'SELECT @variable, @a1_2.3$, @\'var name\', @"var name", @`var name`, @[var name];'
+    );
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        @variable,
+        @a1_2.3$,
+        @'var name',
+        @"var name",
+        @\`var name\`,
+        @[var name];
+    `);
+  });
+
+  it('replaces @variables with param values', () => {
+    const result = sqlFormatter.format(
+      "SELECT @variable, @a1_2.3$, @'var name', @\"var name\", @`var name`, @[var name], @'var\\name';",
+      {
+        params: {
+          variable: '"variable value"',
+          'a1_2.3$': "'weird value'",
+          'var name': "'var value'",
+          'var\\name': "'var\\ value'",
+        },
+      }
+    );
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        "variable value",
+        'weird value',
+        'var value',
+        'var value',
+        'var value',
+        'var value',
+        'var\\ value';
+    `);
+  });
+
+  it('recognizes :variables', () => {
+    const result = sqlFormatter.format(
+      'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`, :[var name];'
+    );
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        :variable,
+        :a1_2.3$,
+        :'var name',
+        :"var name",
+        :\`var name\`,
+        :[var name];
+    `);
+  });
+
+  it('replaces :variables with param values', () => {
+    const result = sqlFormatter.format(
+      'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`,' +
+        " :[var name], :'escaped \\'var\\'', :\"^*& weird \\\" var   \";",
+      {
+        params: {
+          variable: '"variable value"',
+          'a1_2.3$': "'weird value'",
+          'var name': "'var value'",
+          "escaped 'var'": "'weirder value'",
+          '^*& weird " var   ': "'super weird value'",
+        },
+      }
+    );
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        "variable value",
+        'weird value',
+        'var value',
+        'var value',
+        'var value',
+        'var value',
+        'weirder value',
+        'super weird value';
+    `);
+  });
+
+  it('recognizes ?[0-9]* placeholders', () => {
+    const result = sqlFormatter.format('SELECT ?1, ?25, ?;');
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        ?1,
+        ?25,
+        ?;
+    `);
+  });
+
+  it('recognizes Snowflake JSON references', () => {
+    const result = sqlFormatter.format('SELECT foo:bar, foo:bar:baz');
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        foo:bar,
+        foo:bar:baz
+    `);
+  });
+
   it('replaces ? numbered placeholders with param values', () => {
-    const result = format('SELECT ?1, ?2, ?0;', {
+    const result = sqlFormatter.format('SELECT ?1, ?2, ?0;', {
       params: {
         0: 'first',
         1: 'second',
-        2: 'third'
-      }
+        2: 'third',
+      },
     });
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -171,8 +329,8 @@ describe('StandardSqlFormatter', () => {
   });
 
   it('replaces ? indexed placeholders with param values', () => {
-    const result = format('SELECT ?, ?, ?;', {
-      params: ['first', 'second', 'third']
+    const result = sqlFormatter.format('SELECT ?, ?, ?;', {
+      params: ['first', 'second', 'third'],
     });
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -182,9 +340,33 @@ describe('StandardSqlFormatter', () => {
     `);
   });
 
+  it('formats SELECT query with CROSS JOIN', () => {
+    const result = sqlFormatter.format('SELECT a, b FROM t CROSS JOIN t2 on t.id = t2.id_t');
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        a,
+        b
+      FROM
+        t
+        CROSS JOIN t2 on t.id = t2.id_t
+    `);
+  });
+
+  it('formats SELECT query with CROSS APPLY', () => {
+    const result = sqlFormatter.format('SELECT a, b FROM t CROSS APPLY fn(t.id)');
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        a,
+        b
+      FROM
+        t
+        CROSS APPLY fn(t.id)
+    `);
+  });
+
   it('formats query with GO batch separator', () => {
     const result = format('SELECT 1 GO SELECT 2', {
-      params: ['first', 'second', 'third']
+      params: ['first', 'second', 'third'],
     });
     expect(result).toBe(dedent/* sql */ `
       SELECT

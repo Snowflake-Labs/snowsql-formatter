@@ -273,7 +273,7 @@ const reservedWords = [
   'WITH',
   'WORK',
   'WRITE',
-  'YEAR_MONTH'
+  'YEAR_MONTH',
 ];
 
 const reservedTopLevelWords = [
@@ -299,7 +299,7 @@ const reservedTopLevelWords = [
   'SET',
   'UPDATE',
   'VALUES',
-  'WHERE'
+  'WHERE',
 ];
 
 const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
@@ -319,7 +319,7 @@ const reservedNewlineWords = [
   'RIGHT JOIN',
   'RIGHT OUTER JOIN',
   'WHEN',
-  'XOR'
+  'XOR',
 ];
 
 let tokenizer;
@@ -350,7 +350,7 @@ export default class StandardSqlFormatter {
         closeParens: [')', 'END'],
         indexedPlaceholderTypes: ['?'],
         namedPlaceholderTypes: ['@', ':'],
-        lineCommentTypes: ['#', '--']
+        lineCommentTypes: ['#', '--'],
       });
     }
     return new Formatter(this.cfg, tokenizer).format(query);

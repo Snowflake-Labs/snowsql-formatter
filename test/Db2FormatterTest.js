@@ -56,7 +56,7 @@ describe('Db2Formatter', () => {
 
   it('replaces :variables with param values', () => {
     const result = format('SELECT :variable', {
-      params: { variable: '"variable value"' }
+      params: { variable: '"variable value"' },
     });
     expect(result).toBe(dedent/* sql */ `
       SELECT

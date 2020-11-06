@@ -109,15 +109,15 @@ describe('PlSqlFormatter', () => {
       params: {
         0: 'first',
         1: 'second',
-        2: 'third'
-      }
+        2: 'third',
+      },
     });
     expect(result).toBe('SELECT\n  second,\n  third,\n  first;');
   });
 
   it('replaces ? indexed placeholders with param values', () => {
     const result = format('SELECT ?, ?, ?;', {
-      params: ['first', 'second', 'third']
+      params: ['first', 'second', 'third'],
     });
     expect(result).toBe('SELECT\n  first,\n  second,\n  third;');
   });

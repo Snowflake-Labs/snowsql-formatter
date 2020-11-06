@@ -503,7 +503,7 @@ const reservedWords = [
   'XMLEXISTS',
   'XMLNAMESPACES',
   'YEAR',
-  'YEARS'
+  'YEARS',
 ];
 
 const reservedTopLevelWords = [
@@ -528,7 +528,7 @@ const reservedTopLevelWords = [
   'SET',
   'UPDATE',
   'VALUES',
-  'WHERE'
+  'WHERE',
 ];
 
 const reservedTopLevelWordsNoIndent = ['INTERSECT', 'INTERSECT ALL', 'MINUS', 'UNION', 'UNION ALL'];
@@ -543,7 +543,7 @@ const reservedNewlineWords = [
   'OR',
   'OUTER JOIN',
   'RIGHT JOIN',
-  'RIGHT OUTER JOIN'
+  'RIGHT OUTER JOIN',
 ];
 
 let tokenizer;
@@ -575,7 +575,7 @@ export default class Db2Formatter {
         indexedPlaceholderTypes: ['?'],
         namedPlaceholderTypes: [':'],
         lineCommentTypes: ['--'],
-        specialWordChars: ['#', '@']
+        specialWordChars: ['#', '@'],
       });
     }
     return new Formatter(this.cfg, tokenizer).format(query);

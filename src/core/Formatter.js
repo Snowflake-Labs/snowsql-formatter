@@ -4,7 +4,7 @@ import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
 
-const trimSpacesEnd = str => str.replace(/[ \t]+$/u, '');
+const trimSpacesEnd = (str) => str.replace(/[ \t]+$/u, '');
 
 export default class Formatter {
   /**
@@ -71,6 +71,12 @@ export default class Formatter {
         formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
       } else if (token.type === tokenTypes.CLOSE_PAREN) {
         formattedQuery = this.formatClosingParentheses(token, formattedQuery);
+      } else if (
+        (token.type === tokenTypes.WORD || token.type === tokenTypes.PLACEHOLDER) &&
+        this.nextToken().type === tokenTypes.PLACEHOLDER
+      ) {
+        // identifiers followed by placeholders are actually JSON object lookups in Snowflake
+        formattedQuery += token.value;
       } else if (token.type === tokenTypes.PLACEHOLDER) {
         formattedQuery = this.formatPlaceholder(token, formattedQuery);
       } else if (token.value === ',') {
@@ -135,7 +141,7 @@ export default class Formatter {
     const preserveWhitespaceFor = [
       tokenTypes.WHITESPACE,
       tokenTypes.OPEN_PAREN,
-      tokenTypes.LINE_COMMENT
+      tokenTypes.LINE_COMMENT,
     ];
     if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
       query = trimSpacesEnd(query);
@@ -210,5 +216,9 @@ export default class Formatter {
 
   previousToken(offset = 1) {
     return this.tokens[this.index - offset] || {};
+  }
+
+  nextToken(offset = 1) {
+    return this.tokens[this.index + offset] || {};
   }
 }

@@ -93,25 +93,17 @@
           scrolling="0"
           width="120px"
           height="20px"
-          style="position: relative;top: 1px;"
+          style="position: relative; top: 1px"
         ></iframe>
       </div>
 
       <div class="select-wrapper">
         Format
         <select id="language">
-          <option value="sql">
-            SQL
-          </option>
-          <option value="n1ql">
-            N1QL
-          </option>
-          <option value="db2">
-            DB2
-          </option>
-          <option value="pl/sql">
-            PL/SQL
-          </option>
+          <option value="sql">SQL</option>
+          <option value="n1ql">N1QL</option>
+          <option value="db2">DB2</option>
+          <option value="pl/sql">PL/SQL</option>
         </select>
       </div>
     </header>
@@ -143,7 +135,7 @@ SELECT supplier_name, city FROM suppliers&#10;WHERE supplier_id > 500&#10;ORDER 
           console.time('formatting');
 
           output.value = sqlFormatter.format(input.value, {
-            language: language.options[language.selectedIndex].value
+            language: language.options[language.selectedIndex].value,
           });
 
           console.timeEnd('formatting');

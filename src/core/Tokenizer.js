@@ -54,7 +54,7 @@ export default class Tokenizer {
 
   createLineCommentRegex(lineCommentTypes) {
     return new RegExp(
-      `^((?:${lineCommentTypes.map(c => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`,
+      `^((?:${lineCommentTypes.map((c) => escapeRegExp(c)).join('|')}).*?(?:\r\n|\r|\n|$))`,
       'u'
     );
   }
@@ -89,14 +89,14 @@ export default class Tokenizer {
       '[]': '((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)',
       '""': '(("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
       "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-      "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)"
+      "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)",
     };
 
-    return stringTypes.map(t => patterns[t]).join('|');
+    return stringTypes.map((t) => patterns[t]).join('|');
   }
 
   createParenRegex(parens) {
-    return new RegExp('^(' + parens.map(p => this.escapeParen(p)).join('|') + ')', 'iu');
+    return new RegExp('^(' + parens.map((p) => this.escapeParen(p)).join('|') + ')', 'iu');
   }
 
   escapeParen(paren) {
@@ -164,7 +164,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.WHITESPACE,
-      regex: this.WHITESPACE_REGEX
+      regex: this.WHITESPACE_REGEX,
     });
   }
 
@@ -176,7 +176,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.LINE_COMMENT,
-      regex: this.LINE_COMMENT_REGEX
+      regex: this.LINE_COMMENT_REGEX,
     });
   }
 
@@ -184,7 +184,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.BLOCK_COMMENT,
-      regex: this.BLOCK_COMMENT_REGEX
+      regex: this.BLOCK_COMMENT_REGEX,
     });
   }
 
@@ -192,7 +192,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.STRING,
-      regex: this.STRING_REGEX
+      regex: this.STRING_REGEX,
     });
   }
 
@@ -200,7 +200,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.OPEN_PAREN,
-      regex: this.OPEN_PAREN_REGEX
+      regex: this.OPEN_PAREN_REGEX,
     });
   }
 
@@ -208,7 +208,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.CLOSE_PAREN,
-      regex: this.CLOSE_PAREN_REGEX
+      regex: this.CLOSE_PAREN_REGEX,
     });
   }
 
@@ -224,7 +224,7 @@ export default class Tokenizer {
     return this.getPlaceholderTokenWithKey({
       input,
       regex: this.IDENT_NAMED_PLACEHOLDER_REGEX,
-      parseKey: v => v.slice(1)
+      parseKey: (v) => v.slice(1),
     });
   }
 
@@ -232,7 +232,8 @@ export default class Tokenizer {
     return this.getPlaceholderTokenWithKey({
       input,
       regex: this.STRING_NAMED_PLACEHOLDER_REGEX,
-      parseKey: v => this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) })
+      parseKey: (v) =>
+        this.getEscapedPlaceholderKey({ key: v.slice(2, -1), quoteChar: v.slice(-1) }),
     });
   }
 
@@ -240,7 +241,7 @@ export default class Tokenizer {
     return this.getPlaceholderTokenWithKey({
       input,
       regex: this.INDEXED_PLACEHOLDER_REGEX,
-      parseKey: v => v.slice(1)
+      parseKey: (v) => v.slice(1),
     });
   }
 
@@ -261,7 +262,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.NUMBER,
-      regex: this.NUMBER_REGEX
+      regex: this.NUMBER_REGEX,
     });
   }
 
@@ -270,7 +271,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.OPERATOR,
-      regex: this.OPERATOR_REGEX
+      regex: this.OPERATOR_REGEX,
     });
   }
 
@@ -292,7 +293,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.RESERVED_TOP_LEVEL,
-      regex: this.RESERVED_TOP_LEVEL_REGEX
+      regex: this.RESERVED_TOP_LEVEL_REGEX,
     });
   }
 
@@ -300,7 +301,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.RESERVED_NEWLINE,
-      regex: this.RESERVED_NEWLINE_REGEX
+      regex: this.RESERVED_NEWLINE_REGEX,
     });
   }
 
@@ -308,7 +309,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.RESERVED_TOP_LEVEL_NO_INDENT,
-      regex: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX
+      regex: this.RESERVED_TOP_LEVEL_NO_INDENT_REGEX,
     });
   }
 
@@ -316,7 +317,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.RESERVED,
-      regex: this.RESERVED_PLAIN_REGEX
+      regex: this.RESERVED_PLAIN_REGEX,
     });
   }
 
@@ -324,7 +325,7 @@ export default class Tokenizer {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.WORD,
-      regex: this.WORD_REGEX
+      regex: this.WORD_REGEX,
     });
   }
 
