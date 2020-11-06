@@ -124,9 +124,7 @@ export default class Formatter {
   }
 
   formatNewlineReservedWord(token, query) {
-    return (
-      this.addNewline(query) + this.equalizeWhitespace(this.formatReservedWord(token.value)) + ' '
-    );
+    return this.addNewline(query) + this.equalizeWhitespace(this.formatReservedWord(token.value)) + ' ';
   }
 
   // Replace any sequence of whitespace characters with single space
@@ -138,11 +136,7 @@ export default class Formatter {
   formatOpeningParentheses(token, query) {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
-    const preserveWhitespaceFor = [
-      tokenTypes.WHITESPACE,
-      tokenTypes.OPEN_PAREN,
-      tokenTypes.LINE_COMMENT,
-    ];
+    const preserveWhitespaceFor = [tokenTypes.WHITESPACE, tokenTypes.OPEN_PAREN, tokenTypes.LINE_COMMENT];
     if (!includes(preserveWhitespaceFor, this.previousToken().type)) {
       query = trimSpacesEnd(query);
     }

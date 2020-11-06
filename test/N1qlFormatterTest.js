@@ -5,7 +5,7 @@ import dedent from 'dedent-js';
 describe('N1qlFormatter', () => {
   behavesLikeSqlFormatter('n1ql');
 
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'n1ql' });
+  const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language: 'n1ql'});
 
   it('formats SELECT query with element selection expression', () => {
     const result = format('SELECT order_lines[0].productId FROM orders;');
@@ -31,9 +31,7 @@ describe('N1qlFormatter', () => {
   });
 
   it('formats INSERT with {} object literal', () => {
-    const result = format(
-      "INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});"
-    );
+    const result = format("INSERT INTO heroes (KEY, VALUE) VALUES ('123', {'id':1,'type':'Tarzan'});");
     expect(result).toBe(dedent/* sql */ `
       INSERT INTO
         heroes (KEY, VALUE)
@@ -110,9 +108,7 @@ describe('N1qlFormatter', () => {
   });
 
   it('formats UPDATE query with USE KEYS and RETURNING', () => {
-    const result = format(
-      "UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type"
-    );
+    const result = format("UPDATE tutorial USE KEYS 'baldwin' SET type = 'actor' RETURNING tutorial.type");
     expect(result).toBe(dedent/* sql */ `
       UPDATE
         tutorial

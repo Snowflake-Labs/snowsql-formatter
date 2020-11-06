@@ -6,19 +6,18 @@ describe('StandardSqlFormatter', () => {
   behavesLikeSqlFormatter();
 
   const format = (query, cfg = {}) => {
-    return sqlFormatter.format(query, { ...cfg, language: 'sql' });
+    return sqlFormatter.format(query, {...cfg, language: 'sql'});
   };
 
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);')).toBe(
-      'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);'
+      'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);',
     );
   });
 
   it('formats long CREATE TABLE', () => {
-    expect(
-      format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);')
-    ).toBe(dedent/* sql */ `
+    expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);'))
+      .toBe(dedent/* sql */ `
       CREATE TABLE items (
         a INT PRIMARY KEY,
         b TEXT,
@@ -30,7 +29,7 @@ describe('StandardSqlFormatter', () => {
 
   it('formats INSERT without INTO', () => {
     const result = format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
+      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');",
     );
     expect(result).toBe(dedent/* sql */ `
       INSERT
@@ -66,9 +65,7 @@ describe('StandardSqlFormatter', () => {
   });
 
   it('recognizes @variables', () => {
-    const result = format(
-      'SELECT @variable, @a1_2.3$, @\'var name\', @"var name", @`var name`, @[var name];'
-    );
+    const result = format('SELECT @variable, @a1_2.3$, @\'var name\', @"var name", @`var name`, @[var name];');
     expect(result).toBe(dedent/* sql */ `
       SELECT
         @variable,
@@ -90,7 +87,7 @@ describe('StandardSqlFormatter', () => {
           'var name': "'var value'",
           'var\\name': `'var\\ value'`,
         },
-      }
+      },
     );
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -105,9 +102,7 @@ describe('StandardSqlFormatter', () => {
   });
 
   it('recognizes :variables', () => {
-    const result = format(
-      'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`, :[var name];'
-    );
+    const result = format('SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`, :[var name];');
     expect(result).toBe(dedent/* sql */ `
       SELECT
         :variable,
@@ -131,7 +126,7 @@ describe('StandardSqlFormatter', () => {
           "escaped 'var'": "'weirder value'",
           '^*& weird " var   ': "'super weird value'",
         },
-      }
+      },
     );
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -157,11 +152,8 @@ describe('StandardSqlFormatter', () => {
   });
 
   it('formats long CREATE TABLE', () => {
-    expect(
-      sqlFormatter.format(
-        'CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);'
-      )
-    ).toBe(dedent/* sql */ `
+    expect(sqlFormatter.format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);'))
+      .toBe(dedent/* sql */ `
       CREATE TABLE items (
         a INT PRIMARY KEY,
         b TEXT,
@@ -173,7 +165,7 @@ describe('StandardSqlFormatter', () => {
 
   it('formats INSERT without INTO', () => {
     const result = sqlFormatter.format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
+      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');",
     );
     expect(result).toBe(dedent/* sql */ `
       INSERT
@@ -184,9 +176,7 @@ describe('StandardSqlFormatter', () => {
   });
 
   it('formats ALTER TABLE ... MODIFY query', () => {
-    const result = sqlFormatter.format(
-      'ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;'
-    );
+    const result = sqlFormatter.format('ALTER TABLE supplier MODIFY supplier_name char(100) NOT NULL;');
     expect(result).toBe(dedent/* sql */ `
       ALTER TABLE
         supplier
@@ -196,9 +186,7 @@ describe('StandardSqlFormatter', () => {
   });
 
   it('formats ALTER TABLE ... ALTER COLUMN query', () => {
-    const result = sqlFormatter.format(
-      'ALTER TABLE supplier ALTER COLUMN supplier_name VARCHAR(100) NOT NULL;'
-    );
+    const result = sqlFormatter.format('ALTER TABLE supplier ALTER COLUMN supplier_name VARCHAR(100) NOT NULL;');
     expect(result).toBe(dedent/* sql */ `
       ALTER TABLE
         supplier
@@ -214,7 +202,7 @@ describe('StandardSqlFormatter', () => {
 
   it('recognizes @variables', () => {
     const result = sqlFormatter.format(
-      'SELECT @variable, @a1_2.3$, @\'var name\', @"var name", @`var name`, @[var name];'
+      'SELECT @variable, @a1_2.3$, @\'var name\', @"var name", @`var name`, @[var name];',
     );
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -237,7 +225,7 @@ describe('StandardSqlFormatter', () => {
           'var name': "'var value'",
           'var\\name': "'var\\ value'",
         },
-      }
+      },
     );
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -253,7 +241,7 @@ describe('StandardSqlFormatter', () => {
 
   it('recognizes :variables', () => {
     const result = sqlFormatter.format(
-      'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`, :[var name];'
+      'SELECT :variable, :a1_2.3$, :\'var name\', :"var name", :`var name`, :[var name];',
     );
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -278,7 +266,7 @@ describe('StandardSqlFormatter', () => {
           "escaped 'var'": "'weirder value'",
           '^*& weird " var   ': "'super weird value'",
         },
-      }
+      },
     );
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -444,7 +432,7 @@ describe('StandardSqlFormatter', () => {
 
   it('formats CASE ... WHEN with a blank expression', () => {
     const result = format(
-      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;",
     );
 
     expect(result).toBe(dedent/* sql */ `
@@ -458,9 +446,7 @@ describe('StandardSqlFormatter', () => {
   });
 
   it('formats CASE ... WHEN inside SELECT', () => {
-    const result = format(
-      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
-    );
+    const result = format("SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table");
 
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -479,7 +465,7 @@ describe('StandardSqlFormatter', () => {
 
   it('formats CASE ... WHEN with an expression', () => {
     const result = format(
-      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
+      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;",
     );
 
     expect(result).toBe(dedent/* sql */ `
@@ -532,7 +518,7 @@ describe('StandardSqlFormatter', () => {
       SELECT a FROM b
       --comment
       ;
-    `)
+    `),
     ).toBe(dedent/* sql */ `
       SELECT
         a
@@ -547,7 +533,7 @@ describe('StandardSqlFormatter', () => {
       format(dedent/* sql */ `
       SELECT a --comment
       , b
-    `)
+    `),
     ).toBe(dedent/* sql */ `
       SELECT
         a --comment

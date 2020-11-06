@@ -5,11 +5,10 @@ import dedent from 'dedent-js';
 describe('PlSqlFormatter', () => {
   behavesLikeSqlFormatter('pl/sql');
 
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language: 'pl/sql' });
+  const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language: 'pl/sql'});
 
   it('formats FETCH FIRST like LIMIT', () => {
-    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;'))
-      .toBe(dedent/* sql */ `
+    expect(format('SELECT col1 FROM tbl ORDER BY col2 DESC FETCH FIRST 20 ROWS ONLY;')).toBe(dedent/* sql */ `
         SELECT
           col1
         FROM
@@ -45,14 +44,13 @@ describe('PlSqlFormatter', () => {
 
   it('formats short CREATE TABLE', () => {
     expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT);')).toBe(
-      'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);'
+      'CREATE TABLE items (a INT PRIMARY KEY, b TEXT);',
     );
   });
 
   it('formats long CREATE TABLE', () => {
-    expect(
-      format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);')
-    ).toBe(dedent/* sql */ `
+    expect(format('CREATE TABLE items (a INT PRIMARY KEY, b TEXT, c INT NOT NULL, d INT NOT NULL);'))
+      .toBe(dedent/* sql */ `
       CREATE TABLE items (
         a INT PRIMARY KEY,
         b TEXT,
@@ -64,7 +62,7 @@ describe('PlSqlFormatter', () => {
 
   it('formats INSERT without INTO', () => {
     const result = format(
-      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
+      "INSERT Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');",
     );
     expect(result).toBe(dedent/* sql */ `
       INSERT
@@ -179,7 +177,7 @@ describe('PlSqlFormatter', () => {
 
   it('formats CASE ... WHEN with a blank expression', () => {
     const result = format(
-      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;"
+      "CASE WHEN option = 'foo' THEN 1 WHEN option = 'bar' THEN 2 WHEN option = 'baz' THEN 3 ELSE 4 END;",
     );
 
     expect(result).toBe(dedent/* sql */ `
@@ -193,9 +191,7 @@ describe('PlSqlFormatter', () => {
   });
 
   it('formats CASE ... WHEN inside SELECT', () => {
-    const result = format(
-      "SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table"
-    );
+    const result = format("SELECT foo, bar, CASE baz WHEN 'one' THEN 1 WHEN 'two' THEN 2 ELSE 3 END FROM table");
 
     expect(result).toBe(dedent/* sql */ `
       SELECT
@@ -214,7 +210,7 @@ describe('PlSqlFormatter', () => {
 
   it('formats CASE ... WHEN with an expression', () => {
     const result = format(
-      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;"
+      "CASE toString(getNumber()) WHEN 'one' THEN 1 WHEN 'two' THEN 2 WHEN 'three' THEN 3 ELSE 4 END;",
     );
 
     expect(result).toBe(dedent/* sql */ `
@@ -231,7 +227,7 @@ describe('PlSqlFormatter', () => {
   it('properly converts to uppercase in case statements', () => {
     const result = format(
       "case toString(getNumber()) when 'one' then 1 when 'two' then 2 when 'three' then 3 else 4 end;",
-      { uppercase: true }
+      {uppercase: true},
     );
     expect(result).toBe(dedent/* sql */ `
       CASE

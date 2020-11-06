@@ -411,11 +411,7 @@ const reservedNewlineWords = [
 ];
 
 const tokenOverride = (token, previousReservedToken) => {
-  if (
-    token.type === tokenTypes.RESERVED_TOP_LEVEL &&
-    token.value === 'SET' &&
-    previousReservedToken.value === 'BY'
-  ) {
+  if (token.type === tokenTypes.RESERVED_TOP_LEVEL && token.value === 'SET' && previousReservedToken.value === 'BY') {
     token.type = tokenTypes.RESERVED;
     return token;
   }

@@ -6,7 +6,7 @@ import dedent from 'dedent-js';
  * @param {String} language
  */
 export default function behavesLikeSqlFormatter(language) {
-  const format = (query, cfg = {}) => sqlFormatter.format(query, { ...cfg, language });
+  const format = (query, cfg = {}) => sqlFormatter.format(query, {...cfg, language});
 
   it('uses given indent config for indention', () => {
     const result = format('SELECT count(*),Column1 FROM Table1;', {
@@ -44,9 +44,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('formats complex SELECT', () => {
-    const result = format(
-      "SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;"
-    );
+    const result = format("SELECT DISTINCT name, ROUND(age/7) field1, 18 + 20 AS field2, 'some string' FROM foo;");
     expect(result).toBe(dedent/* sql */ `
       SELECT
         DISTINCT name,
@@ -152,9 +150,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('formats SELECT query with SELECT query inside it', () => {
-    const result = format(
-      'SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b'
-    );
+    const result = format('SELECT *, SUM(*) AS sum FROM (SELECT * FROM Posts LIMIT 30) WHERE a > b');
     expect(result).toBe(dedent/* sql */ `
       SELECT
         *,
@@ -230,7 +226,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats simple INSERT query', () => {
     const result = format(
-      "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');"
+      "INSERT INTO Customers (ID, MoneyBalance, Address, City) VALUES (12,-123.4, 'Skagen 2111','Stv');",
     );
     expect(result).toBe(dedent/* sql */ `
       INSERT INTO
@@ -282,7 +278,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats simple UPDATE query', () => {
     const result = format(
-      "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';"
+      "UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';",
     );
     expect(result).toBe(dedent/* sql */ `
       UPDATE
@@ -333,7 +329,7 @@ export default function behavesLikeSqlFormatter(language) {
 
   it('formats UPDATE query with AS part', () => {
     const result = format(
-      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary'
+      'UPDATE customers SET total_orders = order_summary.total  FROM ( SELECT * FROM bank) AS order_summary',
     );
     expect(result).toBe(dedent/* sql */ `
       UPDATE
@@ -495,7 +491,7 @@ export default function behavesLikeSqlFormatter(language) {
   });
 
   it('line breaks between queries change with config', () => {
-    const result = format('SELECT * FROM foo; SELECT * FROM bar;', { linesBetweenQueries: 2 });
+    const result = format('SELECT * FROM foo; SELECT * FROM bar;', {linesBetweenQueries: 2});
     expect(result).toBe(dedent/* sql */ `
       SELECT
         *
