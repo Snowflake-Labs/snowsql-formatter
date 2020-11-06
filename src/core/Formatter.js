@@ -74,7 +74,7 @@ export default class Formatter {
       } else if ((token.type === tokenTypes.WORD || token.type === tokenTypes.PLACEHOLDER) &&
         this.nextToken().type === tokenTypes.PLACEHOLDER) {
         // identifiers followed by placeholders are actually JSON object lookups in Snowflake
-        formattedQuery = formattedQuery + token.value;
+        formattedQuery += token.value;
       } else if (token.type === tokenTypes.PLACEHOLDER) {
         formattedQuery = this.formatPlaceholder(token, formattedQuery);
       } else if (token.value === ',') {
