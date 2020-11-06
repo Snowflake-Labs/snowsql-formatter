@@ -154,6 +154,15 @@ describe('StandardSqlFormatter', () => {
     `);
   });
 
+  it("recognizes Snowflake JSON references", function() {
+    const result = sqlFormatter.format("SELECT foo:bar, foo:bar:baz");
+    expect(result).toBe(dedent/* sql */ `
+      SELECT
+        foo:bar,
+        foo:bar:baz
+    `);
+  });
+
   it('replaces ? numbered placeholders with param values', () => {
     const result = format('SELECT ?1, ?2, ?0;', {
       params: {
