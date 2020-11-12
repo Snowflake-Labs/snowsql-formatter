@@ -1,3 +1,5 @@
+// Modifications Copyright (c) 2020 Snowflake Inc.
+
 import includes from 'lodash/includes';
 import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';

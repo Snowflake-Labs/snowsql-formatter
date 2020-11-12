@@ -1,18 +1,10 @@
-# SQL Formatter Plus
+# SnowSQL Formatter
 
-A fork of [SQL Formatter](https://github.com/zeroturnaround/sql-formatter) with some extra bug fixes and features.
-
-Fixes:
-
-- Fixed formatting issue with unicode characters
-- Fixed comment formatting for non-unix line endings
-- Fixed null reference on input tokenization
-- Fixed indentation of multiple statements
+A fork of [sql-formatter-plus](https://github.com/kufii/sql-formatter-plus) with some Snowflake specific syntaxes.
 
 New Features:
 
-- Convert keywords to uppercase with the `uppercase` config option
-- Configurable number of line breaks between queries with the `linesBetweenQueries` config option
+- Recognize JSON references
 
 **SQL Formatter** is a JavaScript library for pretty-printing SQL queries.
 It started as a port of a [PHP Library][], but has since considerably diverged.
@@ -25,7 +17,7 @@ It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL
 Get the latest version from NPM:
 
 ```shell
-npm install sql-formatter
+npm install snowsql-formatter
 ```
 
 ## Usage
@@ -101,6 +93,11 @@ npm run check
 ```
 
 ...and you're ready to poke us with a pull request.
+
+## Next Steps
+
+- Add a snowsql dialect
+- Add support for SnowSQL specific keywords and constructs
 
 ## License
 
