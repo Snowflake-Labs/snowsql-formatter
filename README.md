@@ -96,7 +96,7 @@ npm run check
 
 ## Next Steps
 
-- Add a snowsql dialect
+- Add a `snowsql` dialect
 - Add support for SnowSQL specific keywords and constructs
 
 ## License
