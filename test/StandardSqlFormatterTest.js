@@ -1,3 +1,5 @@
+// Modifications Copyright (c) 2020 Snowflake Inc.
+
 import sqlFormatter from './../src/sqlFormatter';
 import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 import dedent from 'dedent-js';
