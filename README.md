@@ -101,7 +101,7 @@ npm run check
 
 ## License
 
-[MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
+[MIT](https://github.com/Snowflake-Labs/snowsql-formatter/blob/master/LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
