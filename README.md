@@ -10,7 +10,7 @@ New Features:
 It started as a port of a [PHP Library][], but has since considerably diverged.
 It supports [Standard SQL][], [Couchbase N1QL][], [IBM DB2][] and [Oracle PL/SQL][] dialects.
 
-[Try the demo.](https://kufii.github.io/sql-formatter-plus//)
+[Try the demo of the source of this fork.](https://kufii.github.io/sql-formatter-plus//)
 
 ## Install
 
@@ -23,7 +23,7 @@ npm install snowsql-formatter
 ## Usage
 
 ```javascript
-import sqlFormatter from 'sql-formatter-plus';
+import sqlFormatter from 'snowsql-formatter';
 
 console.log(sqlFormatter.format('SELECT * FROM table1'));
 ```
@@ -101,7 +101,7 @@ npm run check
 
 ## License
 
-[MIT](https://github.com/zeroturnaround/sql-formatter/blob/master/LICENSE)
+[MIT](https://github.com/Snowflake-Labs/snowsql-formatter/blob/master/LICENSE)
 
 [php library]: https://github.com/jdorn/sql-formatter
 [standard sql]: https://en.wikipedia.org/wiki/SQL:2011
