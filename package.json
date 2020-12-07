@@ -18,7 +18,8 @@
   "files": [
     "dist",
     "lib",
-    "src"
+    "src",
+    "types"
   ],
   "scripts": {
     "clean": "rimraf lib dist",
@@ -34,9 +35,10 @@
     "build:umd:min": "webpack --mode production src/sqlFormatter.js --output dist/sql-formatter.min.js",
     "prepublish": "npm run clean && npm run check && npm run build"
   },
+  "types": "./types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Snowflake-Labs/snowsql-formatter"
+    "url": "git+https://github.com/Snowflake-Labs/snowsql-formatter.git"
   },
   "bugs": {
     "url": "https://github.com/Snowflake-Labs/snowsql-formatter/issues"
@@ -67,5 +69,11 @@
     ],
     "testRegex": ".*Test",
     "collectCoverage": true
-  }
+  },
+  "homepage": "https://github.com/Snowflake-Labs/snowsql-formatter#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "author": ""
 }
