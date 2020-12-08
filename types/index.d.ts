@@ -1,5 +1,4 @@
-// Type definitions for sql-formatter 2.3
-// Project: https://github.com/zeroturnaround/sql-formatter#readme
+// Type definitions taken from sql-formatter 2.3
 // Definitions by: Jake Boone <https://github.com/jakeboone02>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
