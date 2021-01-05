@@ -73,8 +73,10 @@ export default class Formatter {
         formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
       } else if (token.type === tokenTypes.CLOSE_PAREN) {
         formattedQuery = this.formatClosingParentheses(token, formattedQuery);
-      } else if ((token.type === tokenTypes.WORD || token.type === tokenTypes.PLACEHOLDER) &&
-        this.nextToken().type === tokenTypes.PLACEHOLDER) {
+      } else if (
+        (token.type === tokenTypes.WORD || token.type === tokenTypes.PLACEHOLDER) &&
+        this.nextToken().type === tokenTypes.PLACEHOLDER
+      ) {
         // identifiers followed by placeholders are actually JSON object lookups in Snowflake
         formattedQuery += token.value;
       } else if (token.type === tokenTypes.PLACEHOLDER) {

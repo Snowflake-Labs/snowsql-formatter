@@ -156,8 +156,8 @@ describe('StandardSqlFormatter', () => {
     `);
   });
 
-  it("recognizes Snowflake JSON references", function() {
-    const result = sqlFormatter.format("SELECT foo:bar, foo:bar:baz");
+  it('recognizes Snowflake JSON references', function() {
+    const result = sqlFormatter.format('SELECT foo:bar, foo:bar:baz');
     expect(result).toBe(dedent/* sql */ `
       SELECT
         foo:bar,
