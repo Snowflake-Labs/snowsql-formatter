@@ -20,7 +20,7 @@ export default class Tokenizer {
   constructor(cfg) {
     this.WHITESPACE_REGEX = /^(\s+)/u;
     this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/u;
-    this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|:=|.)/u;
+    this.OPERATOR_REGEX = /^(!=|<>|==|<=|>=|=>|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|.)/u;
 
     this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/u;
     this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
@@ -83,18 +83,21 @@ export default class Tokenizer {
   // 3. double quoted string using "" or \" to escape
   // 4. single quoted string using '' or \' to escape
   // 5. national character quoted string using N'' or N\' to escape
+  // 6. $$ as a string seperator
   createStringPattern(stringTypes) {
     const patterns = {
-      '``': '((`[^`]*($|`))+)',
-      '[]': '((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)',
-      '""': '(("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)',
+      "``": "((`[^`]*($|`))+)",
+      "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
+      "\"\"": "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)",
       "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
-      "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)"
+      "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)",
+      "$$": "((\\$\\$[^\\$]*($|\\$\\$))+)",
+      "{}": "((\\{[^\\}]*($|\\}))(\\}[^\\}]*($|\\}))*)",
+
     };
 
-    return stringTypes.map(t => patterns[t]).join('|');
+    return stringTypes.map(t => patterns[t]).join("|");
   }
-
   createParenRegex(parens) {
     return new RegExp('^(' + parens.map(p => this.escapeParen(p)).join('|') + ')', 'iu');
   }

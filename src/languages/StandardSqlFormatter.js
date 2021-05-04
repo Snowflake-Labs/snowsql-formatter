@@ -345,7 +345,7 @@ export default class StandardSqlFormatter {
         reservedTopLevelWords,
         reservedNewlineWords,
         reservedTopLevelWordsNoIndent,
-        stringTypes: [`""`, "N''", "''", '``', '[]'],
+        stringTypes: [`""`, "N''", "''", "``", "[]", "$$","{}"],
         openParens: ['(', 'CASE'],
         closeParens: [')', 'END'],
         indexedPlaceholderTypes: ['?'],
