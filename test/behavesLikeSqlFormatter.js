@@ -557,4 +557,18 @@ export default function behavesLikeSqlFormatter(language) {
         table(generator(rowcount => 11000)) v
     `);
   });
+
+  it("formats {{}} correctly", function() {
+    const result = format(
+      `select * from {{ ref('var_name') }} where name = 'foo';`
+    );
+    expect(result).toBe(dedent/* sql */`
+      select
+        *
+      from
+        {{ ref('var_name') }}
+      where
+        name = 'foo';
+    `);
+  });
 }
