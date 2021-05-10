@@ -242,7 +242,7 @@ export default class N1qlFormatter {
         reservedTopLevelWords,
         reservedNewlineWords,
         reservedTopLevelWordsNoIndent,
-        stringTypes: [`""`, "''", '``'],
+        stringTypes: [`""`, "''", "``","$$"],
         openParens: ['(', '[', '{'],
         closeParens: [')', ']', '}'],
         namedPlaceholderTypes: ['$'],
