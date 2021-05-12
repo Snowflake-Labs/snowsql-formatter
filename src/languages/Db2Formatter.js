@@ -569,7 +569,7 @@ export default class Db2Formatter {
         reservedTopLevelWords,
         reservedNewlineWords,
         reservedTopLevelWordsNoIndent,
-        stringTypes: [`""`, "''", "``", "[]", "$$"],
+        stringTypes: [`""`, "''", "``", "[]", "$$","{{}}"],
         openParens: ['('],
         closeParens: [')'],
         indexedPlaceholderTypes: ['?'],
